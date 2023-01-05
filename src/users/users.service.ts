@@ -2,23 +2,19 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-import { randomUUID } from 'crypto';
 import { QueryDto } from './dto/query.dto';
+import { UsersRepository } from './users.repository';
 
 @Injectable()
 export class UsersService {
-  private readonly users: User[] = [];
+  constructor(private usersRepository: UsersRepository) {}
 
   async create(createUserDto: CreateUserDto) {
-    const id = randomUUID();
-    const isDeleted = false;
-    const newUser: User = { ...createUserDto, id, isDeleted };
-    this.users.push(newUser);
-    return newUser;
+    return await this.usersRepository.save(createUserDto);
   }
 
   async getAutoSuggestUsers(query: QueryDto) {
-    let users = this.users;
+    let users = await this.usersRepository.findAll();
     if (users) {
       if (query.loginSubstring) {
         users = users.filter((user) =>
@@ -32,39 +28,14 @@ export class UsersService {
   }
 
   async findOne(id: string) {
-    return this.users.find((user) => user.id === id);
+    return await this.usersRepository.findOne(id);
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
-    const user = await this.findOne(id);
-
-    if (!user) {
-      throw new NotFoundException('User not found.');
-    }
-    const updatedUser: User = { ...user, ...updateUserDto };
-
-    this.users.forEach((u, i) => {
-      if (u.id === user.id) {
-        this.users[i] = updatedUser;
-      }
-    });
-
-    return updatedUser;
+    return await this.usersRepository.update(id, updateUserDto);
   }
 
   async remove(id: string) {
-    const user = await this.findOne(id);
-
-    if (!user || user.isDeleted === true) {
-      return null;
-    }
-
-    user.isDeleted = true;
-    this.users.forEach((u, i) => {
-      if (u.id === user.id) {
-        this.users[i] = user;
-      }
-    });
-    return user;
+    return await this.usersRepository.delete(id);
   }
 }

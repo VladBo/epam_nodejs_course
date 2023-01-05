@@ -1,31 +1,19 @@
-import {
-  IsAlphanumeric,
-  IsBoolean,
-  IsInt,
-  IsNotEmpty,
-  IsString,
-  Max,
-  Min,
-} from 'class-validator';
+import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 
+@Entity()
 export class User {
-  @IsString()
-  @IsNotEmpty()
-  readonly id: string;
+  @PrimaryGeneratedColumn()
+  id: string;
 
-  @IsString()
-  @IsNotEmpty()
-  readonly login: string;
+  @Column()
+  login: string;
 
-  @IsAlphanumeric()
-  @IsNotEmpty()
-  readonly password: string;
+  @Column()
+  password: string;
 
-  @IsInt()
-  @Min(4)
-  @Max(130)
-  readonly age: number;
+  @Column()
+  age: number;
 
-  @IsBoolean()
+  @Column({ type: 'boolean', default: false })
   isDeleted: boolean;
 }

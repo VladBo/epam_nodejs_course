@@ -2,69 +2,53 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { User } from './entities/user.entity';
-import { randomUUID } from 'crypto';
 import { QueryDto } from './dto/query.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository, Like, FindManyOptions } from 'typeorm';
 
 @Injectable()
 export class UsersService {
-  private readonly users: User[] = [];
+  constructor(
+    @InjectRepository(User)
+    private usersRepository: Repository<User>,
+  ) {}
 
   async create(createUserDto: CreateUserDto) {
-    const id = randomUUID();
-    const isDeleted = false;
-    const newUser: User = { ...createUserDto, id, isDeleted };
-    this.users.push(newUser);
-    return newUser;
+    return await this.usersRepository.save(createUserDto);
   }
 
   async getAutoSuggestUsers(query: QueryDto) {
-    let users = this.users;
-    if (users) {
-      if (query.loginSubstring) {
-        users = users.filter((user) =>
-          user.login.includes(query.loginSubstring),
-        );
-      }
-      users.sort((a, b) => a.login.localeCompare(b.login));
-      users = users.slice(0, query.limit);
+    const options: FindManyOptions<User> = {
+      take: query.limit,
+      order: { login: 'ASC' },
+      where: {},
+    };
+
+    if (query.loginSubstring) {
+      options.where['login'] = Like(`%${query.loginSubstring}%`);
     }
-    return users;
+    return await this.usersRepository.find(options);
   }
 
   async findOne(id: string) {
-    return this.users.find((user) => user.id === id);
+    return await this.usersRepository.findOneBy({ id });
   }
 
-  async update(id: string, updateUserDto: UpdateUserDto) {
-    const user = await this.findOne(id);
-
-    if (!user) {
-      throw new NotFoundException('User not found.');
+  async update(id: string, user: UpdateUserDto) {
+    await this.usersRepository.update(id, user);
+    const updatedUser = await this.usersRepository.findOneBy({ id });
+    if (updatedUser) {
+      return updatedUser;
     }
-    const updatedUser: User = { ...user, ...updateUserDto };
-
-    this.users.forEach((u, i) => {
-      if (u.id === user.id) {
-        this.users[i] = updatedUser;
-      }
-    });
-
-    return updatedUser;
+    throw new NotFoundException(id);
   }
 
   async remove(id: string) {
-    const user = await this.findOne(id);
-
-    if (!user || user.isDeleted === true) {
-      return null;
-    }
-
-    user.isDeleted = true;
-    this.users.forEach((u, i) => {
-      if (u.id === user.id) {
-        this.users[i] = user;
-      }
+    const softDelete = await this.usersRepository.update(id, {
+      isDeleted: true,
     });
-    return user;
+    if (!softDelete) {
+      throw new NotFoundException(id);
+    }
   }
 }

@@ -5,9 +5,9 @@ export default () => ({
     host: process.env.POSTGRES_HOST,
     port: parseInt(process.env.POSTGRES_PORT, 10) || 5432,
     username: process.env.POSTGRES_USER,
-    name: process.env.POSTGRES_DB,
+    database: process.env.POSTGRES_DB,
     password: process.env.POSTGRES_PASSWORD,
-    synchronize: true,
+    synchronize: false,
     autoLoadEntities: true,
   },
 });

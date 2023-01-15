@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import configuration from './config/configuration';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { GroupsModule } from './groups/groups.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
       load: [configuration],
     }),
     UsersModule,
+    GroupsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

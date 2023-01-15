@@ -45,8 +45,8 @@ export class GroupsController {
   @Post(':id/add-users')
   async addUserGroup(
     @Param('id') id: string,
-    @Body() AddUsersToGroupDto: AddUsersToGroupDto,
+    @Body() addUsersToGroupDto: AddUsersToGroupDto,
   ) {
-    return this.groupsService.addUsersToGroup(id, AddUsersToGroupDto);
+    return this.groupsService.addUsersToGroup(id, addUsersToGroupDto);
   }
 }

@@ -7,13 +7,6 @@ import { User } from '../users/entities';
 
 @Injectable()
 export class GroupsService {
-  // constructor(
-  //   @InjectRepository(Group)
-  //   @InjectRepository(User)
-  //   private groupsRepository: Repository<Group>,
-  //   private usersRepository: Repository<User>,
-  // ) {}
-
   constructor(
     @InjectRepository(Group)
     private groupsRepository: Repository<Group>,

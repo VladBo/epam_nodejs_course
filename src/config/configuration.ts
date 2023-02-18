@@ -9,5 +9,6 @@ export default () => ({
     password: process.env.POSTGRES_PASSWORD,
     synchronize: false,
     autoLoadEntities: true,
+    logging: true,
   },
 });

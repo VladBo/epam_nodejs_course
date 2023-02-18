@@ -6,11 +6,14 @@ import {
   Patch,
   Param,
   Delete,
+  UseInterceptors,
 } from '@nestjs/common';
 import { GroupsService } from './groups.service';
 import { CreateGroupDto, UpdateGroupDto, AddUsersToGroupDto } from './dto';
+import { LoggerInterceptor } from '../utils/logger.interceptor';
 
 @Controller('groups')
+@UseInterceptors(LoggerInterceptor)
 export class GroupsController {
   constructor(private readonly groupsService: GroupsService) {}
 

@@ -6,7 +6,7 @@ import { UsersModule } from './users/users.module';
 import configuration from './config/configuration';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { GroupsModule } from './groups/groups.module';
-import { LoggerMiddleware } from './utils/logs.middleware';
+import { LoggerMiddleware } from './utils/logger.middleware';
 
 @Module({
   imports: [

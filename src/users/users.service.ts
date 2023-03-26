@@ -14,7 +14,7 @@ export class UsersService {
   ) {}
 
   async create(createUserDto: CreateUserDto) {
-    return await this.usersRepository.save(createUserDto);
+    return this.usersRepository.save(createUserDto);
   }
 
   async getAutoSuggestUsers(query: QueryDto) {
@@ -27,11 +27,18 @@ export class UsersService {
     if (query.loginSubstring) {
       options.where['login'] = Like(`%${query.loginSubstring}%`);
     }
-    return await this.usersRepository.find(options);
+    return this.usersRepository.find(options);
   }
 
   async findOne(id: string) {
-    return await this.usersRepository.findOneBy({ id });
+    return this.usersRepository.findOneBy({ id });
+  }
+
+  async getUser({ username, password }) {
+    return this.usersRepository.findOneBy({
+      login: username,
+      password,
+    });
   }
 
   async update(id: string, user: UpdateUserDto) {

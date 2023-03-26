@@ -7,6 +7,7 @@ import configuration from './config/configuration';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { GroupsModule } from './groups/groups.module';
 import { LoggerMiddleware } from './utils/logger.middleware';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { LoggerMiddleware } from './utils/logger.middleware';
     }),
     UsersModule,
     GroupsModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],

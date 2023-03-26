@@ -11,4 +11,5 @@ export default () => ({
     autoLoadEntities: true,
     logging: true,
   },
+  secret: process.env.SECRET,
 });

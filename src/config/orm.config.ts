@@ -1,4 +1,4 @@
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { ConfigModule } from '@nestjs/config';
 import configuration from './configuration';
 import { DataSource, DataSourceOptions } from 'typeorm';
 

@@ -16,8 +16,6 @@ export class AuthService {
     } catch (error) {
       throw new ForbiddenException();
     }
-    // const user = await this.usersService.getUser({ username, password });
-    // return user ?? null;
   }
 
   async login(user: User) {

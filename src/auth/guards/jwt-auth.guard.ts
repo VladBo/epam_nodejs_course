@@ -1,5 +1,6 @@
 import {
   ExecutionContext,
+  ForbiddenException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -20,12 +21,18 @@ export class JwtAuthGuard extends AuthGuard('jwt') {
     if (isPublic) {
       return true;
     }
+
+    const req = context.switchToHttp().getRequest();
+    if (!req.headers.authorization) {
+      throw new UnauthorizedException();
+    }
+
     return super.canActivate(context);
   }
 
   handleRequest(err, user) {
     if (err || !user) {
-      throw err || new UnauthorizedException();
+      throw err || new ForbiddenException();
     }
     return user;
   }

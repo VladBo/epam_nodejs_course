@@ -6,17 +6,8 @@ import { CreateUserDto, QueryDto, UpdateUserDto } from './dto';
 const testUserLogin = 'Test user 1';
 const testUserPassword = 'Test password 1';
 
-// const testUser = {
-//   id: '24ba2bbd-8ffc-4f51-b626-a0d13b4846a4',
-//   login: 'Adolfo_Bednar',
-//   password: 'tugixopiterotakopaza',
-//   age: 64,
-//   isDeleted: false,
-// };
-
 describe('Users Controller', () => {
   let controller: UsersController;
-  let service: UsersService;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -70,7 +61,6 @@ describe('Users Controller', () => {
     }).compile();
 
     controller = module.get<UsersController>(UsersController);
-    service = module.get<UsersService>(UsersService);
   });
 
   it('should be defined', () => {

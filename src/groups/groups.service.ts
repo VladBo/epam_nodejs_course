@@ -15,15 +15,15 @@ export class GroupsService {
   ) {}
 
   async create(group: CreateGroupDto) {
-    return await this.groupsRepository.save(group);
+    return this.groupsRepository.save(group);
   }
 
   async findAll() {
-    return await this.groupsRepository.find({ relations: ['users'] });
+    return this.groupsRepository.find({ relations: ['users'] });
   }
 
   async findOne(id: string) {
-    return await this.groupsRepository.findOne({
+    return this.groupsRepository.findOne({
       where: { id },
       relations: ['users'],
     });
@@ -61,6 +61,6 @@ export class GroupsService {
       throw new NotFoundException(id);
     }
     group.users.push(...users);
-    return await this.groupsRepository.save(group);
+    return this.groupsRepository.save(group);
   }
 }
